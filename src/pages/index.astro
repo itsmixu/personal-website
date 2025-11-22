@@ -1,16 +1,169 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
 
+type Section = {
+  id: string;
+  heading: string;
+  intro: string;
+  tag?: string;
+  side?: 'left' | 'right';
+  cards?: Array<{ title: string; body: string }>;
+  contact?: Array<{ label: string; value: string; href: string }>;
+  hero?: boolean;
+};
+
+const sections: Section[] = [
+  {
+    id: 'hero-intro',
+    heading: "AV tech for shows that actually work",
+    intro:
+      "I'm Miko Hurme, an 18-year-old AV technician and maker. I wire and run systems for live events, learn fast, and document everything so the next show goes smoother.",
+    hero: true
+  },
+  {
+    id: 'about',
+    tag: 'about',
+    heading: "hi, i'm miko",
+    intro:
+      "I'm an 18 y/o AV technician, student, and maker who loves turning rough ideas into working show systems.",
+    side: 'left',
+    cards: [
+      {
+        title: 'builder mindset',
+        body:
+          'I pull gear apart to understand it, document fixes, and push rigs a little further each time.'
+      },
+      {
+        title: 'live systems',
+        body: 'Comfortable with lighting desks, audio networks, media servers, and the weird glue in-between.'
+      }
+    ]
+  },
+  {
+    id: 'experience',
+    tag: 'experience',
+    heading: "where i've been",
+    intro:
+      'From school theatres to city events, I handle load-ins, operate shows, and keep signal paths healthy under pressure.',
+    side: 'right',
+    cards: [
+      {
+        title: 'event ops',
+        body: 'Front-of-house engineering, playback, and lighting operation for concerts, theatre, and hybrid events.'
+      },
+      {
+        title: 'production labs',
+        body: 'Prototype installations, interactive lighting, and content pipelines for student and community projects.'
+      }
+    ]
+  },
+  {
+    id: 'looking',
+    tag: 'looking for',
+    heading: "what i'm chasing next",
+    intro:
+      'I want to keep learning on teams that experiment—whether that’s touring support, creative tech studios, or production houses.',
+    side: 'left',
+    cards: [
+      {
+        title: 'roles',
+        body: 'Assistant systems tech, LX/programming support, media playback, or hands-on fabrication roles.'
+      },
+      {
+        title: 'values',
+        body: 'Projects with collaborative crews, good documentation habits, and room to tinker with new workflows.'
+      }
+    ]
+  },
+  {
+    id: 'contact',
+    heading: "let's work together",
+    intro:
+      'Tell me about the show, installation, or experiment you need help with. I’m currently open to part-time gigs, apprenticeships, and collaborations.',
+    hero: true,
+    contact: [
+      { label: 'Email', value: 'contact@mikohurme.com', href: 'mailto:contact@mikohurme.com' },
+      { label: 'LinkedIn', value: 'linkedin.com/in/mikohurme', href: 'https://linkedin.com/in/mikohurme' },
+      { label: 'Instagram', value: '@mikohurme', href: 'https://instagram.com/mikohurme' }
+    ]
+  }
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Miko Hurme — AV technician, student, maker"
+  description="Personal site for Miko Hurme highlighting AV technology, event production, and maker projects."
+>
+  <div class="section-stack">
+    {sections.map((section) => {
+      const isHero = section.hero === true;
+      const blockClass = [
+        'section-block',
+        isHero ? 'section-block--hero' : '',
+        section.side ? `section-block--${section.side}` : ''
+      ]
+        .filter(Boolean)
+        .join(' ');
+      const frameClass = [
+        'section-block__frame',
+        isHero ? 'section-block__frame--hero' : '',
+        section.side === 'right' && !isHero ? 'section-block__frame--split-right' : ''
+      ]
+        .filter(Boolean)
+        .join(' ');
+      const contentClass = [
+        'section-block__content',
+        isHero ? 'section-block__content--hero' : ''
+      ]
+        .filter(Boolean)
+        .join(' ');
+
+      return (
+        <section
+          class={blockClass}
+          data-section-id={section.id}
+          data-section-side={section.side ?? (section.hero ? 'left' : 'right')}
+        >
+          <div class={frameClass}>
+            <div class={contentClass}>
+              <header class={isHero ? 'section-block__header section-block__header--hero' : 'section-block__header'}>
+                {section.tag && <span class="tag">{section.tag}</span>}
+                <h1>{section.heading}</h1>
+                <p>{section.intro}</p>
+              </header>
+
+              {section.cards && section.cards.length > 0 && (
+                <div class={`card-grid ${section.cards.length > 1 ? 'card-grid--two' : ''}`}>
+                  {section.cards.map((card) => (
+                    <div class="card">
+                      <h2>{card.title}</h2>
+                      <p>{card.body}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {section.contact && (
+                <div class="contact-links">
+                  {section.contact.map((item) => (
+                    <a
+                      class="contact-link"
+                      href={item.href}
+                      target={item.href.startsWith('http') ? '_blank' : undefined}
+                      rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    >
+                      <span class="contact-link__label">{item.label}</span>
+                      <span class="contact-link__value">{item.value}</span>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+            {!isHero && <div class="section-block__void" aria-hidden="true"></div>}
+          </div>
+        </section>
+      );
+    })}
+  </div>
+</BaseLayout>
+

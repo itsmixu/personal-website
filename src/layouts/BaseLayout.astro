@@ -1,0 +1,44 @@
+---
+import AsciiCanvas from '../components/AsciiCanvas';
+import SectionObserver from '../components/SectionObserver';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Miko Hurme — AV technician, student, and maker',
+  description = 'Personal site of Miko Hurme, exploring AV technology, events, and maker projects.'
+} = Astro.props as Props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <AsciiCanvas client:load />
+    <SectionObserver client:load />
+    <div class="noise" aria-hidden="true"></div>
+    <main class="page-shell" id="top">
+      <div class="page-container">
+        <slot />
+      </div>
+    </main>
+  </body>
+</html>
+
+
