@@ -10,6 +10,7 @@ type Section = {
   cards?: Array<{ title: string; body: string }>;
   contact?: Array<{ label: string; value: string; href: string }>;
   hero?: boolean;
+  footer?: string;
 };
 
 const sections: Section[] = [
@@ -18,7 +19,8 @@ const sections: Section[] = [
     heading: "AV tech for shows that actually work",
     intro:
       "I'm Miko Hurme, an 18-year-old AV technician and maker. I wire and run systems for live events, learn fast, and document everything so the next show goes smoother.",
-    hero: true
+    hero: true,
+    footer: 'Scroll down to explore'
   },
   {
     id: 'about',
@@ -81,6 +83,7 @@ const sections: Section[] = [
     intro:
       'Tell me about the show, installation, or experiment you need help with. I’m currently open to part-time gigs, apprenticeships, and collaborations.',
     hero: true,
+    footer: 'Currently replying within 1-2 days.',
     contact: [
       { label: 'Email', value: 'contact@mikohurme.com', href: 'mailto:contact@mikohurme.com' },
       { label: 'LinkedIn', value: 'linkedin.com/in/mikohurme', href: 'https://linkedin.com/in/mikohurme' },
@@ -158,8 +161,16 @@ const sections: Section[] = [
                   ))}
                 </div>
               )}
+
+              {section.footer && <p class="section-block__footer">{section.footer}</p>}
             </div>
-            {!isHero && <div class="section-block__void" aria-hidden="true"></div>}
+            {!isHero && (
+              <div class="section-block__media" aria-hidden="true">
+                <div class="section-block__media-placeholder">
+                  <span>future image slot</span>
+                </div>
+              </div>
+            )}
           </div>
         </section>
       );
